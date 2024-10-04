@@ -1,3 +1,5 @@
+import Header from '../components/shared/Header'
+import { ThemeProvider } from '../components/shared/theme-provider'
 import './globals.css'
 
 export const metadata = {
@@ -11,8 +13,21 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header/>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
+  </>
   )
 }
