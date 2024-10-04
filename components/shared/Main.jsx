@@ -1,18 +1,22 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const [eventList, setEventList] = useState([]);
+  const [bookedEvents, setBookedEvents] = useState([]);
 
   useEffect(() => {
-    const events = JSON.parse(localStorage.getItem("events") || "[]");
-    setEventList(events);
+    if (typeof window !== "undefined") {
+      // Ensure localStorage is accessed only on the client-side
+      const events = JSON.parse(localStorage.getItem("events") || "[]");
+      setEventList(events);
+      
+      const booked = JSON.parse(localStorage.getItem("bookedEvents")) || [];
+      setBookedEvents(booked);
+    }
   }, []);
-
-  const bookedEvents = JSON.parse(localStorage.getItem("bookedEvents")) || [];
 
   const handleBookEvent = (event) => {
     if (
@@ -23,6 +27,7 @@ export default function Home() {
     }
 
     const updateBookedEvents = [...bookedEvents, event];
+    setBookedEvents(updateBookedEvents);
     localStorage.setItem("bookedEvents", JSON.stringify(updateBookedEvents));
     toast.success("Event booked successfully!", { autoClose: 2000 });
   };
